@@ -11,6 +11,7 @@ GPhoto.
 - **Automatic Token Refresh** - GPhoto automatically refreshes the token if an error occurs during the photo upload process, ensuring a seamless and uninterrupted uploading
   experience.
 - **Secure Local Storage** - All authentication data and cache is securely stored locally to ensure your privacy and security. GPhoto does not collect any information from you.
+
 ## Installation
 
 Please make sure you have the following requirements installed below:
@@ -18,6 +19,10 @@ Please make sure you have the following requirements installed below:
 - PHP 8.1 with curl, inotify, pcntl, and bcmatch extensions.
 
 Download the latest release from the [releases page](https://github.com/OctopyID/GPhotoCLI/releases) or clone this repository.
+
+> **Note**
+>
+> For now only tested on Linux environment.
 
 ## Usage
 
