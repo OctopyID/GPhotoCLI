@@ -1,16 +1,21 @@
 # Google Photo CLI
 
-GPhoto streamlines the photo uploading process and helps you keep your photo library organized. Say goodbye to manual photo uploads and hello to efficient photo management with
+GPhoto streamlines the photo uploading process and helps you keep your photo library organized. Say goodbye to manual
+photo uploads and hello to efficient photo management with
 GPhoto.
 
 ## Features
 
-- **No Duplicate Processing** - GPhoto uses a cache with keys based on hash files to ensure that the same files are not processed repeatedly, saving you time and storage.
-- **No Duplicate Album Names** - GPhoto fetches album names from Google and compares them to ensure there are no duplicates, helping you keep your photo library organized and easy
+- **No Duplicate Processing** - GPhoto uses a cache with keys based on hash files to ensure that the same files are not
+  processed repeatedly, saving you time and storage.
+- **No Duplicate Album Names** - GPhoto fetches album names from Google and compares them to ensure there are no
+  duplicates, helping you keep your photo library organized and easy
   to navigate.
-- **Automatic Token Refresh** - GPhoto automatically refreshes the token if an error occurs during the photo upload process, ensuring a seamless and uninterrupted uploading
+- **Automatic Token Refresh** - GPhoto automatically refreshes the token if an error occurs during the photo upload
+  process, ensuring a seamless and uninterrupted uploading
   experience.
-- **Secure Local Storage** - All authentication data and cache is securely stored locally to ensure your privacy and security. GPhoto does not collect any information from you.
+- **Secure Local Storage** - All authentication data and cache is securely stored locally to ensure your privacy and
+  security. GPhoto does not collect any information from you.
 
 ## Installation
 
@@ -18,7 +23,8 @@ Please make sure you have the following requirements installed below:
 
 - PHP 8.1 with curl, inotify, pcntl, and bcmatch extensions.
 
-Download the latest release from the [releases page](https://github.com/OctopyID/GPhotoCLI/releases) or clone this repository.
+Download the latest release from the [releases page](https://github.com/OctopyID/GPhotoCLI/releases) or clone this
+repository.
 
 > **Note**
 >
@@ -26,7 +32,8 @@ Download the latest release from the [releases page](https://github.com/OctopyID
 
 ## Usage
 
-Before using this application, you need to create a Google Cloud Platform project and enable the Google Photos Library API and create
+Before using this application, you need to create a Google Cloud Platform project and enable the Google Photos Library
+API and create
 a [OAuth 2.0 Client ID](https://developers.google.com/photos/library/guides/overview#authorization).
 
 The authentication file should look like this :
@@ -99,7 +106,13 @@ php gphoto upload:photo ./path/to/Pictures --auth=foo --album="My Album"
 
 ### 3. Albums
 
-#### 3.1 Upload Single Album
+#### 3.1 Show List of Albums
+
+```bash
+php gphoto list:albums --auth=foo
+``` 
+
+#### 3.2 Upload Single Album
 
 To upload a single album, you need to create a directory that contains all photos with the following structure:
 
@@ -118,7 +131,7 @@ php gphoto upload:album ./path/to/MyAlbum --auth=foo
 
 This will upload all files in the `MyAlbum` directory to Google Photos and create an album with the `MyAlbum` name.
 
-#### 3.2 Upload Multiple Albums
+#### 3.3 Upload Multiple Albums
 
 To upload multiple albums, you need to create a directory that contains all albums with the following structure:
 
@@ -141,7 +154,8 @@ To upload multiple albums, you need to create a directory that contains all albu
 php gphoto upload:album ./path/to/MyAlbumCollection --auth=foo --multiple
 ```
 
-This will upload all files in the `MyAlbumCollection` directory to Google Photos and create an album with `MyAlbum 1` and `MyAlbum 2` names.
+This will upload all files in the `MyAlbumCollection` directory to Google Photos and create an album with `MyAlbum 1`
+and `MyAlbum 2` names.
 
 ## Credits
 
