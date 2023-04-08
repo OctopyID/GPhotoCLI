@@ -31,6 +31,14 @@ final class GPhoto
     }
 
     /**
+     * @return string
+     */
+    public function name() : string
+    {
+        return $this->name;
+    }
+
+    /**
      * @return OAuth2
      */
     public function oauth() : OAuth2

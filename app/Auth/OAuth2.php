@@ -2,6 +2,8 @@
 
 namespace App\Auth;
 
+use App\Exceptions\InvalidAuthenticationException;
+use App\Exceptions\InvalidTokenException;
 use App\GPhoto;
 use Google\Auth\OAuth2 as GoogleOAuth2;
 use Illuminate\Support\Arr;
@@ -31,9 +33,16 @@ class OAuth2 extends GoogleOAuth2
 
     /**
      * @return string
+     * @throws InvalidAuthenticationException
      */
     public function fetchNewAccessToken() : string
     {
+        if (! file_exists($this->gphoto->path('storage/token'))) {
+            throw new InvalidAuthenticationException(
+                sprintf("'%s' auth name is not exists. Use --auth option to specify the authentication name", $this->gphoto->name())
+            );
+        }
+
         $this->setCode(file_get_contents($this->gphoto->path(
             'storage/token'
         )));
