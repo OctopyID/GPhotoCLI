@@ -45,11 +45,15 @@ class UploadPhotoCommand extends Command
      */
     public function handle() : void
     {
+        if (! $this->option('auth')) {
+            $this->input->setOption('auth', 'default');
+        }
+
         $gphoto = new GPhoto($this->option('auth'));
 
         if (! file_exists($gphoto->path('storage/token'))) {
             $this->components->error(
-                'TOKEN NOT EXISTS run "gphoto token:create" instead'
+                'TOKEN NOT EXISTS run "gphoto auth:create" instead'
             );
 
             return;

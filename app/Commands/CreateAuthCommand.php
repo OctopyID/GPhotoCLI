@@ -34,7 +34,7 @@ class CreateAuthCommand extends Command
     public function handle(Config $config) : void
     {
         if (! $this->argument('name')) {
-            $this->input->setArgument('name', $this->ask('ENTER NAME'));
+            $this->input->setArgument('name', 'default');
         }
 
         foreach (['auth', 'host'] as $option) {

@@ -2,16 +2,11 @@
 
 namespace App\Commands;
 
-use App\Config\Config;
 use App\Exceptions\InvalidTokenException;
 use App\GPhoto;
-use App\Listeners\TokenListener;
-use Exception;
 use Google\ApiCore\ApiException;
 use Google\ApiCore\ValidationException;
 use Google\Photos\Types\Album;
-use Illuminate\Support\Facades\Process;
-use JetBrains\PhpStorm\NoReturn;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -38,12 +33,11 @@ class ListAlbumsCommand extends Command
      */
     public function handle() : void
     {
-        $auth = $this->option('auth');
-        if (! $auth) {
-            $auth = 'default';
+        if (! $this->option('auth')) {
+            $this->input->setOption('auth', 'default');
         }
 
-        $gphoto = new GPhoto($auth);
+        $gphoto = new GPhoto($this->option('auth'));
 
         $response = $gphoto->client()->listAlbums([
             'excludeNonAppCreatedData' => true,

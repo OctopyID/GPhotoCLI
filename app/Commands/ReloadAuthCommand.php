@@ -34,7 +34,7 @@ class ReloadAuthCommand extends Command
     public function handle() : void
     {
         if (! $this->argument('name')) {
-            $this->input->setArgument('name', $this->ask('ENTER NAME'));
+            $this->input->setArgument('name', 'default');
         }
 
         $gphoto = new GPhoto($this->argument('name'));
