@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Exceptions\InvalidTokenException;
 use App\GPhoto;
+use Exception;
 use Google\ApiCore\ApiException;
 use Google\ApiCore\ValidationException;
 use Google\Photos\Types\Album;
@@ -12,6 +13,11 @@ use Symfony\Component\Console\Input\InputOption;
 
 class ListAlbumsCommand extends Command
 {
+    /**
+     * @var int
+     */
+    protected int $retry = 3;
+
     /**
      * The signature of the command.
      *
@@ -39,30 +45,49 @@ class ListAlbumsCommand extends Command
 
         $gphoto = new GPhoto($this->option('auth'));
 
-        $response = $gphoto->client()->listAlbums([
-            'excludeNonAppCreatedData' => true,
-        ]);
+        try {
+            $response = $gphoto->client()->listAlbums([
+                'excludeNonAppCreatedData' => true,
+            ]);
 
-        $results = [];
-        foreach ($response->iterateAllElements() as $album) {
-            /**
-             * @var Album $album
-             */
-            $results[] = [$album->getTitle(), $album->getMediaItemsCount(), $album->getProductUrl(),];
+            $results = [];
+            foreach ($response->iterateAllElements() as $album) {
+                /**
+                 * @var Album $album
+                 */
+                $results[] = [$album->getTitle(), $album->getMediaItemsCount(), $album->getProductUrl(),];
+            }
+
+            // sort by title
+            usort($results, function ($a, $b) {
+                return $a[0] <=> $b[0];
+            });
+
+            $numb = 1;
+            $data = [];
+            foreach ($results as $item) {
+                $data[] = [$numb++, ...$item];
+            }
+
+            $this->table(['#', 'TITLE', 'MEDIA', 'URL'], $data);
+        } catch (Exception) {
+            echo PHP_EOL;
+
+            $this->components->warn(
+                'EXPIRED TOKEN, RETRYING'
+            );
+
+            $gphoto->revoke();
+
+            $this->call('auth:reload', [
+                'name' => $this->option('auth'),
+            ]);
+
+            if ($this->retry > 0) {
+                $this->retry--;
+                $this->handle();
+            }
         }
-
-        // sort by title
-        usort($results, function ($a, $b) {
-            return $a[0] <=> $b[0];
-        });
-
-        $numb = 1;
-        $data = [];
-        foreach ($results as $item) {
-            $data[] = [$numb++, ...$item];
-        }
-
-        $this->table(['#', 'TITLE', 'MEDIA', 'URL'], $data);
     }
 
     /**
