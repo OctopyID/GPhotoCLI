@@ -2,4 +2,5 @@
 /.idea
 /.vscode
 /.vagrant
-.phpunit.result.cache
+/composer.lock
+/.phpunit.result.cache
