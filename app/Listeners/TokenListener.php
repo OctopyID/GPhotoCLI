@@ -40,27 +40,37 @@ class TokenListener
                 return;
             }
 
-            # start php server
-            $process = Process::start(sprintf('php -S %s -t %s %s',
-                $this->getHostAndPort(), dirname($endpoint), $endpoint
-            ));
+            // skip inotify for MacOS M2 Chipset
+            if (strtolower(PHP_OS) !== 'darwin' && class_exists(Inotify::class)) {
+                $process = Process::start(sprintf('php -S %s -t %s %s',
+                    $this->getHostAndPort(), dirname($endpoint), $endpoint
+                ));
 
-            $inotify = new Inotify($this->getTokenLocation());
+                $inotify = new Inotify($this->getTokenLocation());
 
-            # when token file is modified
-            # kill php server and terminate inotify
-            $inotify->event->on(IN_MODIFY, function (InotifyWatcher $inotify) use ($process, $output) {
-                # kill php server
-                # i not sure, but it needs to be + 1 to kill the php server
-                system('kill ' . $process->id() + 1);
+                # when token file is modified
+                # kill php server and terminate inotify
+                $inotify->event->on(IN_MODIFY, function (InotifyWatcher $inotify) use ($process, $output) {
+                    # kill php server
+                    # i not sure, but it needs to be + 1 to kill the php server
+                    system('kill ' . $process->id() + 1);
 
-                # kill process and terminate inotify
-                if ($process->signal(SIGTERM) && $inotify->terminate()) {
-                    $output->info('TOKEN HAS BEEN UPDATED');
+                    # kill process and terminate inotify
+                    if ($process->signal(SIGTERM) && $inotify->terminate()) {
+                        $output->info('TOKEN HAS BEEN UPDATED');
+                    }
+                });
+
+                $inotify->watch();
+            } else {
+                $process = Process::run(sprintf('php -S %s -t %s %s',
+                    $this->getHostAndPort(), dirname($endpoint), $endpoint
+                ));
+
+                if (! $process->successful()) {
+                    $output->error('COULD NOT START TOKEN LISTENER');
                 }
-            });
-
-            $inotify->watch();
+            }
         }
     }
 
