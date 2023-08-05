@@ -24,10 +24,6 @@ jobs:
         run: |
           composer install --no-dev --prefer-dist
 
-      - name: Require Inotify Dependency
-        run: |
-          composer require octopyid/laravel-inotify --prefer-dist
-
       - name: Set Variables
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 

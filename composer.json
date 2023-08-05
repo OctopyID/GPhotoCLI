@@ -19,8 +19,9 @@
         "ext-pcntl": "*",
         "ext-bcmath": "*",
         "google/photos-library": "^1.7",
-        "laravel-zero/framework": "^10.0",
-        "nunomaduro/termwind": "^1.15"
+        "laravel-zero/framework": "^10.1",
+        "nunomaduro/termwind": "^1.15",
+        "octopyid/laravel-inotify": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.5.1",
