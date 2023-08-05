@@ -54,7 +54,7 @@ class ReloadAuthCommand extends Command
         $this->components->info('Auth URL : ' . $url);
 
         // open auth url in browser
-        foreach (['xdg-open', 'sensible-browser', 'start'] as $command) {
+        foreach (['xdg-open', 'sensible-browser', 'start', 'open'] as $command) {
             $process = Process::run(sprintf('%s "%s"', $command, $url));
 
             if ($process->successful()) {

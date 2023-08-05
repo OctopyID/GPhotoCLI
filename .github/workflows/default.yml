@@ -16,7 +16,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-          extensions: dom, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, curl, inotify, bcmath
+          extensions: dom, libxml, mbstring, zip, curl, bcmath, pcntl
           tools: composer:v2
           coverage: none
 
@@ -27,7 +27,7 @@ jobs:
       - name: Set Variables
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Build Binary for MacOS
+      - name: Build Binary
         run: php gphoto app:build --build-version=${{ env.RELEASE_VERSION }}
 
       - name: Automatic Releases for MacOS
@@ -46,35 +46,7 @@ jobs:
 
             await github.repos.uploadReleaseAsset({
               owner, repo,
-              name: "gphoto-macos",
-              data: await fs.readFile("./builds/gphoto"),
-              release_id: release.data.id,
-            });
-
-      - name: Require Inotify Dependency
-        run: |
-          composer require octopyid/laravel-inotify --prefer-dist
-
-      - name: Build Binary for Linux
-        run: php gphoto app:build --build-version=${{ env.RELEASE_VERSION }}
-
-      - name: Automatic Releases for Linux
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require("fs").promises;
-            const { repo: { owner, repo }, sha } = context;
-            const release = await github.repos.getReleaseByTag({
-              owner, repo,
-              tag: process.env.GITHUB_REF.replace("refs/tags/", ""),
-            });
-
-            console.log({ release });
-
-            await github.repos.uploadReleaseAsset({
-              owner, repo,
-              name: "gphoto-linux",
+              name: "gphoto-default",
               data: await fs.readFile("./builds/gphoto"),
               release_id: release.data.id,
             });
