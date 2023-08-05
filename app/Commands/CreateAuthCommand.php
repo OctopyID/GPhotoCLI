@@ -55,11 +55,15 @@ class CreateAuthCommand extends Command
 
         $gphoto = new GPhoto($this->argument('name'));
 
+        $url = $gphoto->oauth()->buildFullAuthorizationUri([
+            'access_type' => 'offline',
+        ]);
+
+        $this->components->info('Auth URL : ' . $url);
+
         // open auth url in browser
         foreach (['xdg-open', 'sensible-browser', 'start'] as $command) {
-            $process = Process::run(sprintf('%s "%s"', $command, $gphoto->oauth()->buildFullAuthorizationUri([
-                'access_type' => 'offline',
-            ])));
+            $process = Process::run(sprintf('%s "%s"', $command, $url));
 
             if ($process->successful()) {
                 break;
@@ -67,9 +71,7 @@ class CreateAuthCommand extends Command
         }
 
         $listener = new TokenListener($gphoto);
-        $listener->listen(
-            $this->components
-        );
+        $listener->listen($this->components);
     }
 
     /**
