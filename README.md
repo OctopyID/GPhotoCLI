@@ -27,8 +27,9 @@ Download the latest release from the [releases page](https://github.com/OctopyID
 repository.
 
 > **Note**
->
-> For now only tested on Linux environment.
+> The inotify variant has been tested and is non-functional on MacOS with Apple Silicon chipsets due to the unavailability of ext-inotify. However, I was unable to conduct tests on other chipsets.
+> 
+> Linux users are strongly recommended to utilize the innovative variant for an enhanced experience.
 
 ## Usage
 
