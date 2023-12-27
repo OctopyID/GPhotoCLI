@@ -26,10 +26,20 @@ Please make sure you have the following requirements installed below:
 Download the latest release from the [releases page](https://github.com/OctopyID/GPhotoCLI/releases) or clone this
 repository.
 
-> **Note**
-> The inotify variant has been tested and is non-functional on MacOS with Apple Silicon chipsets due to the unavailability of ext-inotify. However, I was unable to conduct tests on other chipsets.
-> 
-> Linux users are strongly recommended to utilize the innovative variant for an enhanced experience.
+Due to hardware limitations of the Apple Silicon chipsets on macOS, the `ext-inotif` extension is not supported. Consequently, we offer two different build variants to handle this
+situation:
+
+1. **Non-inotify Variant:** This is a standard variant that doesn't rely on the `inotify` extension. It involves the following step:
+    - When a new token is generated, the current process should be manually stopped.
+    - After stopping the process, rerun the upload command to recognize and use the new token in the build process.
+
+
+2. **Inotify Variant:** This variant provides an automated process, leveraging the 'inotify' feature available on Linux. It works as follows:
+    - The build process automatically detects when a new token is generated - without the need for human intervention.
+    - Therefore, there's no need to manually stop and rerun the process - saving time and reducing possible errors.
+
+Please note that the Inotify variant offers a more efficient and seamless experience but it is not compatible with macOS environment that use Apple Silicon chipsets. On the other
+hand, this variant is highly recommended for Linux users who have the `inotify` extension installed and enabled.
 
 ## Usage
 
