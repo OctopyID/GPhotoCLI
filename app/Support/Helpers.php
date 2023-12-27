@@ -2,7 +2,7 @@
 
 if (! function_exists('home_path')) {
     /**
-     * @param  string $path
+     * @param  string|null $path
      * @return string
      */
     function home_path(string $path = null) : string

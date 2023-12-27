@@ -5,12 +5,13 @@ namespace App;
 use App\Auth\Credentials\Credential;
 use App\Auth\OAuth2;
 use App\Config\Config;
+use App\Exceptions\InvalidAuthenticationException;
 use App\Exceptions\InvalidTokenException;
 use Google\ApiCore\ValidationException;
 use Google\Photos\Library\V1\PhotosLibraryClient;
 use Illuminate\Support\Facades\Storage;
 
-final class GPhoto
+class GPhoto
 {
     /**
      * @var Config
@@ -21,6 +22,15 @@ final class GPhoto
      * @var PhotosLibraryClient
      */
     protected PhotosLibraryClient $client;
+
+    /**
+     * @var string[]
+     */
+    protected array $scopes = [
+        'https://www.googleapis.com/auth/photoslibrary',
+        'https://www.googleapis.com/auth/photoslibrary.sharing',
+        'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
+    ];
 
     /**
      * @param  string $name
@@ -49,6 +59,7 @@ final class GPhoto
     /**
      * @throws ValidationException
      * @throws InvalidTokenException
+     * @throws InvalidAuthenticationException
      */
     public function client() : PhotosLibraryClient
     {
@@ -88,10 +99,6 @@ final class GPhoto
      */
     public function scopes() : array
     {
-        return [
-            'https://www.googleapis.com/auth/photoslibrary',
-            'https://www.googleapis.com/auth/photoslibrary.sharing',
-            'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
-        ];
+        return $this->scopes;
     }
 }

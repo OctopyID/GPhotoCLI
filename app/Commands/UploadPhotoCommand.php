@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Exceptions\InvalidAuthenticationException;
 use App\Exceptions\InvalidTokenException;
 use App\GPhoto;
 use FilesystemIterator;
@@ -43,6 +44,7 @@ class UploadPhotoCommand extends Command
      *
      * @return void
      * @throws ValidationException
+     * @throws InvalidAuthenticationException
      */
     public function handle() : void
     {

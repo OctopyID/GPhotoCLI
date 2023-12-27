@@ -40,7 +40,7 @@ class TokenListener
                 return;
             }
 
-            // skip inotify for MacOS M2 Chipset
+            // skip inotify for macOS M2 Chipset
             if (strtolower(PHP_OS) !== 'darwin' && class_exists(Inotify::class)) {
                 $process = Process::start(sprintf('php -S %s -t %s %s',
                     $this->getHostAndPort(), dirname($endpoint), $endpoint

@@ -2,6 +2,7 @@
 
 namespace App\Auth\Credentials;
 
+use App\Exceptions\InvalidAuthenticationException;
 use App\Exceptions\InvalidTokenException;
 use App\GPhoto;
 use Google\Auth\Credentials\UserRefreshCredentials;
@@ -19,7 +20,7 @@ class Credential
 
     /**
      * @return UserRefreshCredentials
-     * @throws InvalidTokenException
+     * @throws InvalidTokenException|InvalidAuthenticationException
      */
     public function getCredential() : UserRefreshCredentials
     {
@@ -44,7 +45,7 @@ class Credential
 
     /**
      * @return UserRefreshCredentials
-     * @throws InvalidTokenException
+     * @throws InvalidTokenException|InvalidAuthenticationException
      */
     private function getFromGoogle() : UserRefreshCredentials
     {
