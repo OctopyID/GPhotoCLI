@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use LaravelZero\Framework\Commands\Command;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Console\Input\InputOption;
 
 class UploadPhotoCommand extends Command
@@ -175,8 +176,11 @@ class UploadPhotoCommand extends Command
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), FilesystemIterator::SKIP_DOTS);
 
         $photos = [];
+        /**
+         * @var SplFileInfo $file
+         */
         foreach ($iterator as $file) {
-            if ($file->isFile()) {
+            if ($file->isFile() && $this->isAcceptableMimeType($file)) {
                 $photos[] = $file->getPathname();
             }
         }
@@ -212,5 +216,24 @@ class UploadPhotoCommand extends Command
             ['album', null, InputOption::VALUE_REQUIRED, 'Album name'],
             ['skip', null, InputOption::VALUE_OPTIONAL, 'Skip certain extensions'],
         ];
+    }
+
+    /**
+     * @param  SplFileInfo $file
+     * @return bool
+     */
+    private function isAcceptableMimeType(SplFileInfo $file) : bool
+    {
+        $mime = mime_content_type($file->getPathname());
+
+        $prefixes = ['image/', 'video/'];
+
+        foreach ($prefixes as $prefix) {
+            if (str_starts_with($mime, $prefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
