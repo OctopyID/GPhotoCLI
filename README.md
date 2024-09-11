@@ -26,7 +26,7 @@ Please make sure you have the following requirements installed below:
 Download the latest release from the [releases page](https://github.com/OctopyID/GPhotoCLI/releases) or clone this
 repository.
 
-Due to hardware limitations of the Apple Silicon chipsets on macOS, the `ext-inotif` extension is not supported. Consequently, we offer two different build variants to handle this
+Due to hardware limitations of the Apple Silicon chipsets on macOS, the `ext-inotify` extension is not supported. Consequently, we offer two different build variants to handle this
 situation:
 
 1. **Non-inotify Variant:** This is a standard variant that doesn't rely on the `inotify` extension. It involves the following step:
