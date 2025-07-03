@@ -27,9 +27,9 @@ class GPhoto
      * @var string[]
      */
     protected array $scopes = [
-        'https://www.googleapis.com/auth/photoslibrary',
-        'https://www.googleapis.com/auth/photoslibrary.sharing',
+        'https://www.googleapis.com/auth/photoslibrary.appendonly',
         'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
+        'https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata',
     ];
 
     /**
