@@ -68,29 +68,52 @@ The authentication file should look like this :
 ### 1. Authorization Token
 
 ```bash
-php gphoto auth:create foo --auth=./path/to/auth.json --host=http://localhost:3000
+php gphoto auth:create --auth=./path/to/auth.json --listen=http://localhost:3000
+```
+
+If your listener is behind a proxy, you can specify a different redirect URI.
+
+```bash
+php gphoto auth:create --auth=./path/to/auth.json --listen=localhost:3000 --redirect=https://yourdomain.com
+```
+
+> [!NOTE]
+> Make sure this listener/redirect URI is also registered in your Google OAuth configuration
+
+
+You can also create a custom profile by providing a profile name as the first argument:
+
+```bash
+php gphoto auth:create personal --auth=./path/to/auth.json --listen=localhost:3000
 ```
 
 The expired token can be renewed with the following command
 
 ```bash
-php gphoto auth:reload foo
+php gphoto auth:reload
 ```
 
-Make sure you register http://localhost:3000 on Authorised redirect URIs and no service uses this port.
+Or for a specific profile:
+
+```bash
+php gphoto auth:reload personal
+
+```
 
 ### 2. Photos
+
+By default, it uses the "default" profile, but you can use a different profile if needed by adding `--auth=personal` to the arguments in all the following commands
 
 #### 2.1 Upload Single File
 
 ```bash
-php gphoto upload:photo ./path/to/photo.png --auth=foo
+php gphoto upload:photo ./path/to/photo.png
 ```
 
 or you can use ` --album` to upload to a specific album.
 
 ```bash
-php gphoto upload:photo ./path/to/MyPicture.png --auth=foo --album="My Album"
+php gphoto upload:photo ./path/to/MyPicture.png --album="My Album"
 ```
 
 #### 2.2 Upload Multiple Files
@@ -106,13 +129,13 @@ To upload multiple files, you need to create a directory that contains all photo
 ```
 
 ```bash
-php gphoto upload:photo ./path/to/Pictures --auth=foo
+php gphoto upload:photo ./path/to/Pictures
 ```
 
 or you can use ` --album` to upload to a specific album.
 
 ```bash
-php gphoto upload:photo ./path/to/Pictures --auth=foo --album="My Album"
+php gphoto upload:photo ./path/to/Pictures --album="My Album"
 ```
 
 ### 3. Albums
@@ -120,7 +143,7 @@ php gphoto upload:photo ./path/to/Pictures --auth=foo --album="My Album"
 #### 3.1 Show List of Albums
 
 ```bash
-php gphoto list:albums --auth=foo
+php gphoto list:albums
 ``` 
 
 #### 3.2 Upload Single Album
@@ -137,7 +160,7 @@ To upload a single album, you need to create a directory that contains all photo
 ```
 
 ```bash
-php gphoto upload:album ./path/to/MyAlbum --auth=foo
+php gphoto upload:album ./path/to/MyAlbum
 ```
 
 This will upload all files in the `MyAlbum` directory to Google Photos and create an album with the `MyAlbum` name.
@@ -162,7 +185,7 @@ To upload multiple albums, you need to create a directory that contains all albu
 ```
 
 ```bash
-php gphoto upload:album ./path/to/MyAlbumCollection --auth=foo --multiple
+php gphoto upload:album ./path/to/MyAlbumCollection --multiple
 ```
 
 This will upload all files in the `MyAlbumCollection` directory to Google Photos and create an album with `MyAlbum 1`
