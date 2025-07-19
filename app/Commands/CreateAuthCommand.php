@@ -37,20 +37,34 @@ class CreateAuthCommand extends Command
             $this->input->setArgument('name', 'default');
         }
 
-        foreach (['auth', 'host'] as $option) {
-            if (! $this->option($option)) {
-                $this->input->setOption($option, $this->ask(sprintf('ENTER %s', strtoupper(
-                    $option
-                ))));
+        if (! $this->option('auth')) {
+            $this->input->setOption('auth', $this->ask('ENTER AUTH FILE PATH'));
+        }
+
+        if (! $this->option('listen')) {
+            $listen = $this->ask('ENTER LISTEN HOST AND PORT', 'localhost:3000');
+
+            // Add http:// prefix if no scheme is provided
+            if (! str_starts_with($listen, 'http://') && ! str_starts_with($listen, 'https://')) {
+                $listen = 'http://' . $listen;
             }
+
+            // Force http:// by replacing https:// if present
+            $listen = preg_replace('/^https:\/\//i', 'http://', $listen);
+
+            $this->input->setOption('listen', $listen);
+        }
+
+        if (! $this->option('redirect')) {
+            $this->input->setOption('redirect', $this->ask('ENTER REDIRECT URI', $this->option('listen')));
         }
 
         $config->store([
-            'auth' => $this->option('auth'),
-            'host' => $this->option('host'),
-            'name' => $this->argument(
-                'name'
-            ),
+            'name'     => $this->argument('name'),
+            //
+            'auth'     => $this->option('auth'),
+            'listen'   => $this->option('listen'),
+            'redirect' => $this->option('redirect'),
         ]);
 
         $gphoto = new GPhoto($this->argument('name'));
@@ -91,7 +105,8 @@ class CreateAuthCommand extends Command
     {
         return [
             ['auth', null, InputOption::VALUE_REQUIRED, 'Credential file'],
-            ['host', null, InputOption::VALUE_REQUIRED, 'Authorised redirect URIs'],
+            ['listen', null, InputOption::VALUE_REQUIRED, 'Host and port to listen for OAuth callback (e.g., 127.0.0.1:8080)'],
+            ['redirect', null, InputOption::VALUE_OPTIONAL, 'Redirect URI (default: uses the listen input value)'],
         ];
     }
 }

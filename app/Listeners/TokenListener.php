@@ -117,6 +117,6 @@ class TokenListener
      */
     private function getHostAndPort() : string
     {
-        return parse_url($this->gphoto->config('host'), PHP_URL_HOST) . ':' . parse_url($this->gphoto->config('host'), PHP_URL_PORT);
+        return parse_url($this->gphoto->config('listen'), PHP_URL_HOST) . ':' . parse_url($this->gphoto->config('listen'), PHP_URL_PORT);
     }
 }
